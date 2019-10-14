@@ -8,6 +8,8 @@ import (
 	"strconv"
 )
 
+var subnetString string
+
 // refreshing the device is required before searching IPs
 func refreshWireGuardDevice() {
 	var err error
@@ -25,12 +27,12 @@ func getRandomIP() net.IPNet {
 	randomIP := net.IPNet{}
 	for randomIPisOK := false; !randomIPisOK; {
 		randomIPisOK = true
-		ipString := "10.200." +
+		ipString := "10." + subnetString + "." +
 			strconv.Itoa(rand.Intn(255)) + "." +
 			strconv.Itoa(rand.Intn(255)) + "/32"
 		randomIP = GetCIDR(ipString)
 
-		for _, checkString := range []string{"10.200.0.0/32", "10.200.0.1/32", "10.200.255.255/32"} {
+		for _, checkString := range []string{"10." + subnetString + ".0.0/32", "10." + subnetString + ".0.1/32", "10." + subnetString + ".255.255/32"} {
 			if ipString == checkString {
 				randomIPisOK = false
 			}

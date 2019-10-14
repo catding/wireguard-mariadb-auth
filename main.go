@@ -141,6 +141,7 @@ func addUserToInterface(w http.ResponseWriter, r *http.Request) {
 func main() {
 	dbInit()
 	wgInterface = os.Getenv("WIREGUARD_INTERFACE")
+	subnetString = os.Getenv("SUBNET_STRING")
 	var wgctrlErr error
 	c, wgctrlErr = wgctrl.New()
 	if wgctrlErr != nil {
