@@ -17,7 +17,7 @@ var c = &wgctrl.Client{}
 var d = &wgtypes.Device{}
 var wgInterface string
 
-type UserOutput struct {
+type userOutput struct {
 	Status     string `json:"status"`
 	ServerKey  string `json:"server_key,omitempty"`
 	ServerPort int    `json:"server_port,omitempty"`
@@ -26,7 +26,7 @@ type UserOutput struct {
 	Message    string `json:"message,omitempty"`
 }
 
-func (o *UserOutput) JSON() string {
+func (o *userOutput) JSON() string {
 	jsonData, err := json.MarshalIndent(o, "", "    ")
 	if err != nil {
 		fmt.Println("Error parsing JSON: ", o)
@@ -35,7 +35,7 @@ func (o *UserOutput) JSON() string {
 	return string(jsonData)
 }
 
-func GetCIDR(s string) net.IPNet {
+func getCIDR(s string) net.IPNet {
 	_, cidr, err := net.ParseCIDR(s)
 	if err != nil {
 		panic(err)
@@ -47,7 +47,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("token") == os.Getenv("WIREGUARD_ADMIN_TOKEN") {
 		fmt.Fprintln(w, deviceKeyMap)
 	} else {
-		o := UserOutput{
+		o := userOutput{
 			Status:  "ERROR",
 			Message: "Admin token rejected!",
 		}
@@ -67,13 +67,13 @@ func kickUser(w http.ResponseWriter, r *http.Request) {
 			wgDeletePubKey(recordedPubKey)
 			delete(deviceKeyMap, loginDevice)
 			mutex.Unlock()
-			o := UserOutput{
+			o := userOutput{
 				Status:  "OK",
 				Message: "Kicked user.",
 			}
 			fmt.Fprintln(w, o.JSON())
 		} else {
-			o := UserOutput{
+			o := userOutput{
 				Status:  "OK",
 				Message: "User not found.",
 			}
@@ -81,7 +81,7 @@ func kickUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		o := UserOutput{
+		o := userOutput{
 			Status:  "ERROR",
 			Message: "Admin token rejected!",
 		}
@@ -99,7 +99,7 @@ func addUserToInterface(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	o := UserOutput{
+	o := userOutput{
 		Status: "ERROR",
 	}
 	// authenticate user

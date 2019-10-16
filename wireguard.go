@@ -30,7 +30,7 @@ func getRandomIP() net.IPNet {
 		ipString := "10." + subnetString + "." +
 			strconv.Itoa(rand.Intn(255)) + "." +
 			strconv.Itoa(rand.Intn(255)) + "/32"
-		randomIP = GetCIDR(ipString)
+		randomIP = getCIDR(ipString)
 
 		for _, checkString := range []string{"10." + subnetString + ".0.0/32", "10." + subnetString + ".0.1/32", "10." + subnetString + ".255.255/32"} {
 			if ipString == checkString {
