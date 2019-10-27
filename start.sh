@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export WIREGUARD_INTERFACE=wg0
+export WIREGUARD_ADMIN_TOKEN=12345
+
 # make sure WIREGUARD_PORT exists and is a number
 if ! [[ $WIREGUARD_PORT =~ ^[0-9]+$ ]] ; then
   export WIREGUARD_PORT=1337
