@@ -3,5 +3,7 @@
     "Mysql_Port": "3306",
     "Mysql_User": "user",
     "Mysql_Password": "123456",
-    "Mysql_Db": "MyDB"
+    "Mysql_Db": "MyDB",
+    "WIREGUARD_INTERFACE":"wg0",
+    "WIREGUARD_ADMIN_TOKEN":"12345"
 }
