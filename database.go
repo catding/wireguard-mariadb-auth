@@ -4,19 +4,29 @@ import (
 	"crypto/subtle"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/akkuman/parseConfig"
 	"os"
 	"regexp"
 )
 
 var db = &sql.DB{}
+var config parseConfig.Config
 
 func dbInit() {
 	// create DB connection
-	dbUsername := os.Getenv("DB_USERNAME")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
+	//dbUsername := os.Getenv("DB_USERNAME")
+	//dbPassword := os.Getenv("DB_PASSWORD")
+	//dbHost := os.Getenv("DB_HOST")
+	//dbPort := os.Getenv("DB_PORT")
+	//dbName := os.Getenv("DB_NAME")
+	config = parseConfig.New("config.json")
+	
+	dbUsername := config.Get("Mysql_User").(string)
+	dbPassword := config.Get("Mysql_Password").(string)
+	dbHost := config.Get("Mysql_Host").(string)
+	dbPort := config.Get("Mysql_Port")
+	dbName := config.Get("Mysql_Db").(string)
+	
 	dbString := dbUsername + ":" +
 		dbPassword + "@tcp(" +
 		dbHost + ":" +
