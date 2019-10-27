@@ -3,6 +3,33 @@
 export WIREGUARD_INTERFACE=wg0
 export WIREGUARD_ADMIN_TOKEN=12345
 
+POOL='https://deb.debian.org/debian/pool/main/w/wireguard/'
+
+[ `dpkg -s libc6 |grep '^Version' |grep -o '[0-9\.]\{4\}' |head -n1 |cut -d'.' -f2` -ge "14" ] || exit 0
+
+apt-get update
+apt-get install -y libmnl-dev libelf-dev linux-headers-$(uname -r) build-essential pkg-config dkms resolvconf 
+
+arch=`dpkg --print-architecture`
+Version=`wget --no-check-certificate -qO- "${POOL}" |grep -o 'wireguard_[0-9\_\.\-]\{1,\}_' |head -n1 |cut -d'_' -f2`
+[ -n "$Version" ] || exit 1
+
+wget --no-check-certificate -qO "/tmp/wireguard_${Version}_all.deb" "${POOL}wireguard_${Version}_all.deb"
+wget --no-check-certificate -qO "/tmp/wireguard-dkms_${Version}_all.deb" "${POOL}wireguard-dkms_${Version}_all.deb"
+wget --no-check-certificate -qO "/tmp/wireguard-tools_${Version}_${arch}.deb" "${POOL}wireguard-tools_${Version}_${arch}.deb"
+
+dpkg -i "/tmp/wireguard-tools_${Version}_${arch}.deb"
+dpkg -i "/tmp/wireguard-dkms_${Version}_all.deb"
+dpkg -i "/tmp/wireguard_${Version}_all.deb"
+
+[ -d /etc/wireguard ] && {
+command -v wg >/dev/null 2>&1
+[ $? == 0 ] || exit 1
+sed -i '/#\?net.ipv4.ip_forward/d' /etc/sysctl.conf
+sed -i '$a\net.ipv4.ip_forward=1' /etc/sysctl.conf
+sysctl -p
+
+
 # make sure WIREGUARD_PORT exists and is a number
 if ! [[ $WIREGUARD_PORT =~ ^[0-9]+$ ]] ; then
   export WIREGUARD_PORT=1337
