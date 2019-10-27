@@ -36,7 +36,7 @@ func authenticate(device string, token string) bool {
 		return false
 	}
 	var col string
-	sqlStatement := `SELECT token FROM devices WHERE device=?;`
+	sqlStatement := `SELECT token FROM devices WHERE enable=1 AND device=?;`
 	scanErr := db.QueryRow(sqlStatement, device).Scan(&col)
 	if scanErr != nil {
 		if scanErr != sql.ErrNoRows {
