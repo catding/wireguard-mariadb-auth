@@ -13,6 +13,12 @@ var db = &sql.DB{}
 var config parseConfig.Config
 
 func dbInit() {
+	var dbUsername string
+	var dbPassword string
+	var dbHost string
+	var dbPort string
+	var dbName string
+	var dbString string
 	// create DB connection
 	//dbUsername := os.Getenv("DB_USERNAME")
 	//dbPassword := os.Getenv("DB_PASSWORD")
@@ -20,12 +26,13 @@ func dbInit() {
 	//dbPort := os.Getenv("DB_PORT")
 	//dbName := os.Getenv("DB_NAME")
 	config = parseConfig.New("config.json")
-	
-	dbUsername := config.Get("Mysql_User").(string)
-	dbPassword := config.Get("Mysql_Password").(string)
-	dbHost := config.Get("Mysql_Host").(string)
-	dbPort := config.Get("Mysql_Port")
-	dbName := config.Get("Mysql_Db").(string)
+	dbUsername = config.Get("Mysql_User").(string)
+	dbPassword = config.Get("Mysql_Password").(string)
+	dbHost = config.Get("Mysql_Host").(string)
+	//var Mysql_Portt = config.Get("Mysql_Port")
+	//dbPort = strconv.Itoa(int(Mysql_Portt.(float64)))
+	dbPort = config.Get("Mysql_Port").(string)
+	dbName = config.Get("Mysql_Db").(string)
 	
 	dbString := dbUsername + ":" +
 		dbPassword + "@tcp(" +
