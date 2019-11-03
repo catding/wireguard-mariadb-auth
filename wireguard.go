@@ -17,6 +17,13 @@ func refreshWireGuardDevice() {
 		fmt.Println("ERROR: ", err)
 		panic(err)
 	}
+	//p.PublicKey.String(),
+		// TODO(mdlayher): get right endpoint with getnameinfo.
+	//	p.Endpoint.String(),
+	//	ipsString(p.AllowedIPs),
+	//	p.LastHandshakeTime.String(),
+	//	p.ReceiveBytes,
+	//	p.TransmitBytes,
 }
 
 // create user IP
